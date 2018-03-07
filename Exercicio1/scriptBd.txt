@@ -1,0 +1,98 @@
+				///// PERSONS \\\\\\
+
+create table Persons.users_types (
+	id_user_type int not null,
+	name nvarchar(100) not null,
+	removed int not null,
+	primary key(id_user_type)
+	);
+
+create table Persons.Users(
+	id_user int not null,
+	name nvarchar(100) not null,
+	removed int not null,
+	id_user_type int not null
+	primary key(id_user),
+	foreign key (id_user_type) references Persons.users_types (id_user_type)
+	);
+
+create table Persons.users_login (
+	id_user_login int not null,
+	id_user int not null,
+	date datetime not null,
+	primary key(id_user_login),
+	foreign key (id_user) references Persons.Users(id_user)
+	
+);
+
+
+				///// COURSES \\\\\
+
+
+create table Courses.Courses(
+	id_course int not null,
+	names nvarchar(100) not null,
+	removed int not null,
+	primary key (id_course)
+);
+
+create table Courses.Tutors (
+	id_course_tutor int not null,
+	id_course int not null,
+	id_user int not null,
+	primary key (id_course_tutor),
+	foreign key (id_course) references Courses.Courses (id_course),
+	foreign key (id_user) references Persons.Users (id_user)
+);
+
+	
+				/////// CLASSES \\\\\\\\
+
+create table Classes.courses_classes (
+	id_course_class int not null,
+	names nvarchar(100) not null,
+	removed int not null,
+	id_course int not null,
+	primary key (id_course_class),
+	foreign key (id_course) references Courses.Courses (id_course)
+);
+
+create table Classes.courses_classes_schedule (
+	id_schedule int not null,
+	id_course_class int not null,
+	date datetime not null,
+	date_finished datetime not null,
+	removed int not null,
+	primary key (id_schedule),
+	foreign key (id_course_class) references Classes.courses_classes (id_course_class)
+); 
+
+create table Classes.courses_classes_contents (
+	id_courses_classes_contents int not null,
+	removed int not null,
+	Descriptiona nvarchar(MAX) not null,
+	id_course_class int not null,
+	primary key (id_courses_classes_contents),
+	foreign key (id_course_class) references Classes.courses_classes (id_course_class)
+);
+
+create table Classes.courses_classes_students (
+	id_course_class_student int not null,
+	id_course_class int not null,
+	id_user int not null,
+	removed int not null,
+	primary key (id_course_class),
+	foreign key (id_course_class) references Classes.courses_classes (id_course_class),
+	foreign key (id_user) references Persons.Users (id_user)
+);
+
+create table Classes.courses_classes_tutors (
+	id_course_classes_tutors int not null,
+	id_course_class int not null,
+	id_course_tutor int not null,
+	removed int not null
+	primary key (id_course_classes_tutors),
+	foreign key (id_course_class) references Classes.courses_classes (id_course_class),
+	foreign key (id_course_tutor) references Courses.Tutors (id_course_tutor)
+
+);
