@@ -81,7 +81,7 @@ create table Classes.courses_classes_students (
 	id_course_class int not null,
 	id_user int not null,
 	removed int not null,
-	primary key (id_course_class),
+	primary key (id_course_class_student),
 	foreign key (id_course_class) references Classes.courses_classes (id_course_class),
 	foreign key (id_user) references Persons.Users (id_user)
 );
@@ -95,4 +95,52 @@ create table Classes.courses_classes_tutors (
 	foreign key (id_course_class) references Classes.courses_classes (id_course_class),
 	foreign key (id_course_tutor) references Courses.Tutors (id_course_tutor)
 
+);
+
+
+			////CONTENTS \\\\\\
+
+create table Contents.courses_classes_activities (
+	id_activity int not null,
+	id_course_class int not null,
+	removed int not null,
+	Descriptiona nvarchar(MAX) not null,
+	scheduled_date datetime not null,
+	primary key (id_activity),
+	foreign key (id_course_class) references Classes.courses_classes (id_course_class)
+
+);
+
+create table Contents.courses_classes_activities_students (
+	id_activity_classes_students int not null,
+	id_activity int not null,
+	id_course_class_student int not null,
+	removed int not null,
+	delivery_date datetime not null,
+	primary key (id_activity_classes_students),
+	foreign key (id_activity) references Contents.courses_classes_activities (id_activity),
+	foreign key (id_course_class_student) references Classes.courses_classes_students (id_course_class_student)
+	 
+);
+
+create table Contents.courses_classes_assessements (
+	id_assessment int not null,
+	id_course_class int not null,
+	removed int not null,
+	scheduled_date datetime not null,
+	realization_date datetime null,
+	descriptiona nvarchar(MAX) not null,
+	primary key (id_assessment),
+	foreign key (id_course_class) references Classes.courses_classes (id_course_class)
+);
+
+create table Contents.assessements_students (
+	id_assessement_student int not null,
+	id_course_class_student int not null,
+	id_assessment int not null,
+	note decimal (5,1) not null,
+	removed int not null,
+	primary key (id_assessement_student),
+	foreign key (id_course_class_student) references Classes.courses_classes_students (id_course_class_student),
+	foreign key (id_assessment) references Contents.courses_classes_assessements (id_assessment)
 );
