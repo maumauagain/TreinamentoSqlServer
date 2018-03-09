@@ -1,0 +1,22 @@
+			//// CONSULTAS \\\\
+
+1- select count(id_user) as 'QTD Usuario', month(login_date) as 'Mes' 
+from dbo.logins 
+group by month(login_date) 
+order by month(login_date) asc
+
+2- select avg(id_user) as 'QTD Usuario', day(login_date) as 'Dia' 
+from dbo.logins 
+group by day(login_date) 
+order by day(login_date) asc
+
+
+3- select sum(length) 
+from (select top 10 length from dbo.stored_files order by length desc) as sf
+
+4- select distinct e.name as 'Estado', count(c.id_state) as 'QTD CIDADE' 
+from dbo.states as e 
+join dbo.cities as c on e.id = c.id_state 
+group by e.name 
+having count(c.id_state) > 100 or count(c.id_state) < 20 
+ORDER BY count(c.id_state) asc
