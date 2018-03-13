@@ -5,7 +5,7 @@ from dbo.logins
 group by month(login_date) 
 order by month(login_date) asc
 
-2- select avg(id_user) as 'QTD Usuario', day(login_date) as 'Dia' 
+2- select top 30 avg(id_user) as 'QTD Usuario', day(login_date) as 'Dia' 
 from dbo.logins 
 group by day(login_date) 
 order by day(login_date) asc
