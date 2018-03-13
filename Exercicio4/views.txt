@@ -1,0 +1,42 @@
+		///// VIEWS \\\\\
+
+1- create view nomecurso_view as
+select names as 'Nome dos Cursos' 
+from Courses.Courses
+
+
+2- create view tutorcurso_view as
+select c.names as 'Nome do Curso', p.names as 'Tutor' 
+from Courses.Tutors t, Courses.Courses c, Persons.Users p 
+where t.id_course = c.id_course and t.id_user = p.id_user
+
+
+3- create view classesdocurso_view as
+select curso.names as 'Curso', classe.names as 'Classe' 
+from Classes.courses_classes classe, Courses.Courses curso 
+where classe.id_course = curso.id_course
+
+
+4- create view tutorclasse_view as
+select p.names as 'Tutor', c.names as 'Classes'
+from Classes.courses_classes_tutors tuts, Courses.Tutors tut, Persons.Users p, Classes.courses_classes c
+where tuts.id_course_tutor = tut.id_course_tutor and tut.id_user = p.id_user and tuts.id_course_class = c.id_course_class
+
+
+5- create view alunosclasse_view as
+select p.names as 'Aluno', c.names as 'Classes' 
+from Classes.courses_classes c, Classes.courses_classes_students s, Persons.Users P
+where c.id_course_class = s.id_course_class and s.id_user = p.id_user
+
+
+6- create view scorealuno_view as
+select p.names as 'Aluno', s.student_score as 'Score'
+from Classes.courses_classes_students s, Persons.Users p
+where s.id_user = p.id_user
+
+
+7- create view numatividades_view as
+select p.names as 'Aluno', count(ativs.delivery_date) as 'qtd'
+from Contents.courses_classes_activities_students ativs, Classes.courses_classes_students students, Persons.Users p
+where ativs.id_course_class_student = students.id_course_class_student and students.id_user = p.id_user
+group by p.names
