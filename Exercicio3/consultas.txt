@@ -1,0 +1,61 @@
+		///// ANTES DO PRAZO \\\\\
+
+select t.names as 'Antes do prazo', s.delivery_date as 'Data de entrega', p.scheduled_date as 'Prazo' from Contents.courses_classes_activities_students s 
+inner join Contents.courses_classes_activities p 
+on s.id_activity = p.id_activity
+inner join Classes.courses_classes_students c
+on s.id_course_class_student = c.id_course_class_student
+inner join Persons.Users t
+on c.id_user = t.id_user
+where s.delivery_date < p.scheduled_date
+
+		//////DEPOIS DO PRAZO \\\\\\\\\\\
+
+select t.names as 'Depois do prazo', s.delivery_date as 'Data de entrega', p.scheduled_date as 'Prazo' from Contents.courses_classes_activities_students s 
+inner join Contents.courses_classes_activities p 
+on s.id_activity = p.id_activity
+inner join Classes.courses_classes_students c
+on s.id_course_class_student = c.id_course_class_student
+inner join Persons.Users t
+on c.id_user = t.id_user
+where s.delivery_date > p.scheduled_date
+
+		///////// NO PRAZO \\\\\\\\\\
+
+select t.names as 'No prazo', s.delivery_date as 'Data de entrega', p.scheduled_date as 'Prazo' from Contents.courses_classes_activities_students s 
+inner join Contents.courses_classes_activities p 
+on s.id_activity = p.id_activity
+inner join Classes.courses_classes_students c
+on s.id_course_class_student = c.id_course_class_student
+inner join Persons.Users t
+on c.id_user = t.id_user
+where s.delivery_date = p.scheduled_date
+
+
+
+
+
+
+		//////ATUALIZAR SCORE PRA 1 ALUNOS QUE TIVERAM ENTREGAS ANTES DO PRAZO \\\\\\\
+
+update Classes.courses_classes_students
+set student_score = 1
+where id_user in (select id_user from Contents.courses_classes_activities_students s 
+inner join Contents.courses_classes_activities p 
+on s.id_activity = p.id_activity
+inner join Classes.courses_classes_students c
+on s.id_course_class_student = c.id_course_class_student
+where s.delivery_date < p.scheduled_date)
+
+
+
+		////////ATUALIZAR SCORE PRA -1 ALUNOS QUE TIVERAM ENTREGAS DEPOIS DO PRAZO \\\\\\\\
+
+update Classes.courses_classes_students
+set student_score = -1
+where id_user in (select id_user from Contents.courses_classes_activities_students s 
+inner join Contents.courses_classes_activities p 
+on s.id_activity = p.id_activity
+inner join Classes.courses_classes_students c
+on s.id_course_class_student = c.id_course_class_student
+where s.delivery_date > p.scheduled_date)
