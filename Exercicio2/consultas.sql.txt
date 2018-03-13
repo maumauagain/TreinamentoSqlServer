@@ -5,10 +5,11 @@ from dbo.logins
 group by month(login_date) 
 order by month(login_date) asc
 
-2- select top 30 avg(id_user) as 'QTD Usuario', day(login_date) as 'Dia' 
+2- select avg(teste2) as teste
+from (select distinct top 30 count(id_user) as teste2, CONVERT(DATE, login_date) as Dia 
 from dbo.logins 
-group by day(login_date) 
-order by day(login_date) asc
+group by CONVERT(DATE, login_date)
+order by CONVERT(DATE, login_date) desc) teste3
 
 
 3- select sum(length) 
