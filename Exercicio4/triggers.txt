@@ -1,0 +1,62 @@
+			/////TRIGGER INSERT \\\\\\
+
+1- create trigger first_trigger 
+on Contents.courses_classes_activities_students
+for insert
+as
+begin 
+	declare	
+
+	@delivery_date datetime,
+	@id_course_class_students int,
+	@id_activity int
+
+	select @delivery_date = delivery_date, @id_course_class_students = id_course_class_student, @id_activity = id_activity from inserted
+
+		update Classes.courses_classes_students set student_score = -1
+		where @id_course_class_students = (select id_course_class_student
+										from Contents.courses_classes_activities a
+										where @id_activity = a.id_activity and @delivery_date > a.scheduled_date)
+
+		update Classes.courses_classes_students set student_score = 1
+		where @id_course_class_students = (select id_course_class_student
+										from Contents.courses_classes_activities a
+										where @id_activity = a.id_activity and @delivery_date < a.scheduled_date)
+
+end
+
+
+
+	////// TRIGGER UPDATE \\\\\\
+
+
+3- create trigger second_trigger 
+on Contents.courses_classes_activities_students
+for	update
+as
+begin 
+	declare	
+
+	@delivery_date datetime,
+	@id_course_class_students int,
+	@id_activity int
+
+	select @delivery_date = delivery_date, @id_course_class_students = id_course_class_student, @id_activity = id_activity from inserted
+
+
+	update Classes.courses_classes_students set student_score = 0
+		where @id_course_class_students = (select id_course_class_student
+										from Contents.courses_classes_activities a
+										where @id_activity = a.id_activity and @delivery_date = a.scheduled_date)
+
+		update Classes.courses_classes_students set student_score = -1
+		where @id_course_class_students = (select id_course_class_student
+										from Contents.courses_classes_activities a
+										where @id_activity = a.id_activity and @delivery_date > a.scheduled_date)
+
+		update Classes.courses_classes_students set student_score = 1
+		where @id_course_class_students = (select id_course_class_student
+										from Contents.courses_classes_activities a
+										where @id_activity = a.id_activity and @delivery_date < a.scheduled_date)
+
+end
